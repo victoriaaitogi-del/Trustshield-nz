@@ -1,0 +1,8 @@
+{
+  "builds": [
+    {
+      "src": "trustshield-nz.jsx",
+      "use": "@vercel/static-build"
+    }
+  ]
+}
