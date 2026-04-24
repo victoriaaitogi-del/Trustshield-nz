@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TrustShield NZ — Verified Business Ratings & AI Safety</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.07);
+    --text: #e2e8f0;
+    --muted: #6b7280;
+    --blue: #3b82f6;
+    --blue-light: #93c5fd;
+    --blue-bg: rgba(59,130,246,0.08);
+    --gold: #C9930A;
+    --gold-bg: rgba(201,147,10,0.10);
+    --silver: #8A9BB5;
+    --silver-bg: rgba(138,155,181,0.10);
+    --bronze: #A0714F;
+    --bronze-bg: rgba(160,113,79,0.08);
+    --green: #3BA87A;
+    --green-bg: rgba(59,168,122,0.08);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #1e2a3a; border-radius: 99px; }
+
+  /* HEADER */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13,17,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #1e3a5f, #0d2137);
+    border: 1.5px solid rgba(99,179,237,0.35);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 900;
+    color: #f0f6ff;
+    letter-spacing: -0.01em;
+  }
+  .logo-name span { color: var(--blue); }
+  .logo-sub { font-size: 10px; color: #4b5563; letter-spacing: 0.08em; text-transform: uppercase; }
+  .nz-badge {
+    font-size: 11px; color: #374151;
+    background: rgba(255,255,255,0.03);
+    padding: 5px 10px; border-radius: 7px;
+    border: 1px solid var(--border);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 69px; z-index: 99;
+  }
+  .tab {
+    flex: 1; padding: 14px 8px;
+    background: transparent; border: none;
+    border-bottom: 2px solid transparent;
+    color: #4b5563; cursor: pointer;
+    font-size: 12px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; text-align: center;
+    line-height: 1.4;
+  }
+  .tab.active {
+    color: var(--blue-light);
+    border-bottom-color: var(--blue);
+    background: var(--blue-bg);
+    font-weight: 700;
+  }
+  .tab-sub { font-size: 10px; opacity: 0.7; margin-top: 2px; }
+
+  /* CONTENT */
+  .content { max-width: 680px; margin: 0 auto; padding: 24px 16px 80px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* TYPOGRAPHY */
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 900;
+    color: #f0f6ff; margin-bottom: 6px;
+  }
+  .page-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+
+  /* SCANNER */
+  .warning-box {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.18);
+    border-radius: 14px; padding: 16px 18px; margin-bottom: 20px;
+  }
+  .warning-label { font-size: 12px; color: #f87171; font-weight: 700; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .warning-text { font-size: 12.5px; color: #9ca3b0; line-height: 1.65; }
+  textarea {
+    width: 100%; min-height: 120px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 12px; color: #d1d5db;
+    font-size: 13px; line-height: 1.6;
+    padding: 14px 16px; resize: vertical;
+    font-family: 'DM Mono', monospace;
+    outline: none; transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: rgba(99,179,237,0.4); box-shadow: 0 0 0 3px rgba(99,179,237,0.08); }
+  .scan-btn {
+    margin-top: 12px; width: 100%; padding: 13px;
+    background: linear-gradient(135deg, #1e3a5f, #1a2d4a);
+    border: 1.5px solid rgba(99,179,237,0.3);
+    border-radius: 12px; color: var(--blue-light);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.05em; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .scan-btn:hover { background: linear-gradient(135deg, #243f6a, #1e3354); }
+  .result-box {
+    margin-top: 16px; padding: 18px 20px;
+    border-radius: 14px; display: none;
+  }
+  .result-box.safe {
+    background: rgba(52,199,89,0.07);
+    border: 1.5px solid rgba(52,199,89,0.25);
+  }
+  .result-box.danger {
+    background: rgba(239,68,68,0.08);
+    border: 1.5px solid rgba(239,68,68,0.3);
+  }
+  .result-title { font-size: 14px; font-weight: 800; letter-spacing: 0.04em; margin-bottom: 12px; }
+  .result-box.safe .result-title { color: #34c759; }
+  .result-box.danger .result-title { color: #f87171; }
+  .flag-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-top: 8px; padding: 8px 12px;
+    background: rgba(239,68,68,0.08); border-radius: 8px;
+    border: 1px solid rgba(239,68,68,0.18);
+  }
+  .flag-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .flag-label { font-size: 12px; font-weight: 700; color: #fca5a5; }
+  .flag-desc { font-size: 11px; color: #9ca3b0; margin-top: 2px; }
+  .result-advice {
+    margin-top: 14px; padding: 10px 14px;
+    background: rgba(255,255,255,0.03); border-radius: 8px;
+    font-size: 12px; color: var(--muted); line-height: 1.6;
+  }
+  .result-advice strong { color: #9ca3b0; }
+
+  /* DIRECTORY */
+  .score-explainer {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px 20px; margin-bottom: 20px;
+  }
+  .explainer-title { font-size: 13px; font-weight: 700; color: #e2e8f0; margin-bottom: 12px; letter-spacing: 0.04em; }
+  .explainer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .explainer-card {
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  .explainer-card-title { font-size: 10px; font-weight: 700; color: var(--blue-light); letter-spacing: 0.05em; margin-bottom: 4px; text-transform: uppercase; }
+  .explainer-card-text { font-size: 11px; color: var(--muted); line-height: 1.55; }
+
+  .tier-filters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .tier-btn {
+    padding: 10px 8px; border-radius: 10px; cursor: pointer;
+    background: rgba(255,255,255,0.025);
+    border: 1.5px solid var(--border);
+    transition: all 0.2s; text-align: center;
+  }
+  .tier-btn .tier-icon { font-size: 18px; line-height: 1; }
+  .tier-btn .tier-name { font-size: 10px; font-weight: 800; letter-spacing: 0.05em; margin-top: 3px; text-transform: uppercase; }
+  .tier-btn .tier-desc { font-size: 10px; color: #4b5563; margin-top: 2px; }
+  .tier-btn.active-gold { background: var(--gold-bg); border-color: rgba(201,147,10,0.35); box-shadow: 0 0 20px rgba(201,147,10,0.2); }
+  .tier-btn.active-silver { background: var(--silver-bg); border-color: rgba(138,155,181,0.3); }
+  .tier-btn.active-bronze { background: var(--bronze-bg); border-color: rgba(160,113,79,0.25); }
+
+  .biz-list { display: flex; flex-direction: column; gap: 14px; }
+  .biz-card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 18px 20px;
+    transition: all 0.3s;
+  }
+  .biz-card.gold { background: var(--gold-bg); border-color: rgba(201,147,10,0.35); box-shadow: 0 0 24px rgba(201,147,10,0.15); }
+  .biz-card.silver { background: var(--silver-bg); border-color: rgba(138,155,181,0.3); }
+  .biz-card.bronze { background: var(--bronze-bg); border-color: rgba(160,113,79,0.2); }
+  .biz-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .biz-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #f0f0f0; margin-bottom: 3px; }
+  .biz-meta { font-size: 11px; color: #6b7280; letter-spacing: 0.04em; }
+  .biz-star { text-align: right; }
+  .biz-star-icon { font-size: 20px; line-height: 1; }
+  .biz-star-label { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; margin-top: 2px; }
+  .biz-desc { font-size: 12.5px; color: #9ca3b0; line-height: 1.6; margin-bottom: 12px; }
+  .biz-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag {
+    font-size: 10px; border-radius: 5px; padding: 2px 7px;
+    border: 1px solid; letter-spacing: 0.04em;
+  }
+  .tag-size-micro { color: #7C6AF5; background: rgba(124,106,245,0.1); border-color: rgba(124,106,245,0.3); font-weight: 700; text-transform: uppercase; }
+  .tag-size-small { color: #3BA87A; background: rgba(59,168,122,0.1); border-color: rgba(59,168,122,0.3); font-weight: 700; text-transform: uppercase; }
+  .tag-size-medium { color: #E07B3A; background: rgba(224,123,58,0.1); border-color: rgba(224,123,58,0.3); font-weight: 700; text-transform: uppercase; }
+  .tag-generic { color: #6b7280; background: rgba(255,255,255,0.04); border-color: var(--border); }
+  .score-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #8a8fa8; margin-bottom: 4px; }
+  .score-bar-track { height: 5px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 99px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+  .biz-footer { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: var(--muted); }
+  .verified-yes { color: var(--green); }
+  .verified-no { color: #E07B3A; }
+
+  /* HOW IT WORKS */
+  .how-section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px 20px; margin-bottom: 16px;
+  }
+  .how-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .how-icon { font-size: 20px; }
+  .how-title { font-size: 13px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+  .how-points { display: flex; flex-direction: column; gap: 8px; }
+  .how-point { display: flex; gap: 10px; align-items: flex-start; }
+  .how-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+  .how-point-text { font-size: 12.5px; color: #9ca3b0; line-height: 1.6; }
+  .concept-note {
+    background: var(--blue-bg); border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 14px; padding: 16px 18px; margin-top: 8px;
+  }
+  .concept-note-title { font-size: 12px; font-weight: 700; color: var(--blue-light); margin-bottom: 6px; }
+  .concept-note-text { font-size: 12px; color: var(--muted); line-height: 1.65; }
+
+  @media (max-width: 400px) {
+    .explainer-grid { grid-template-columns: 1fr; }
+    .tab { font-size: 11px; padding: 12px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">🛡️</div>
+    <div>
+      <div class="logo-name">TrustShield <span>NZ</span></div>
+      <div class="logo-sub">AI Safety · Verified Business Ratings</div>
+    </div>
+  </div>
+  <div class="nz-badge">🇳🇿 NZ Initiative</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" onclick="switchTab('scanner', this)">
+    🔍 Prompt Scanner
+    <div class="tab-sub">Detect AI manipulation</div>
+  </button>
+  <button class="tab" onclick="switchTab('directory', this)">
+    ⭐ Verified Directory
+    <div class="tab-sub">Gold/Silver/Bronze rated</div>
+  </button>
+  <button class="tab" onclick="switchTab('howit', this)">
+    📋 How It Works
+    <div class="tab-sub">Verification process</div>
+  </button>
+</nav>
+
+<div class="content">
+
+  <!-- SCANNER PANEL -->
+  <div class="panel active" id="panel-scanner">
+    <div class="page-title">AI Prompt Injection Scanner</div>
+    <p class="page-sub">Paste any suspicious message to check if it matches known manipulation templates being circulated online to trick AI systems.</p>
+
+    <div class="warning-box">
+      <div class="warning-label">⚠️ WHAT IS PROMPT INJECTION?</div>
+      <p class="warning-text">Malicious actors share copy-paste prompts designed to trick AI systems like Claude and ChatGPT into producing harmful content — scam frameworks, get-rich-quick schemes, or bypassing safety systems. TrustShield scans text before it reaches an AI, flagging known attack patterns.</p>
+    </div>
+
+    <textarea id="scanInput" placeholder="Paste any suspicious prompt or message here to scan it…"></textarea>
+    <button class="scan-btn" onclick="runScan()">🔍 SCAN FOR INJECTION PATTERNS</button>
+
+    <div class="result-box" id="scanResult">
+      <div class="result-title" id="resultTitle"></div>
+      <div id="resultFlags"></div>
+      <div class="result-advice" id="resultAdvice"></div>
+    </div>
+  </div>
+
+  <!-- DIRECTORY PANEL -->
+  <div class="panel" id="panel-directory">
+    <div class="page-title">Verified NZ Business Directory</div>
+    <p class="page-sub">Every reviewer is identity-verified by TrustShield. Scores are size-adjusted — a small business competes fairly with a large one.</p>
+
+    <div class="score-explainer">
+      <div class="explainer-title">📐 HOW THE FAIR SCORE WORKS</div>
+      <div class="explainer-grid">
+        <div class="explainer-card">
+          <div class="explainer-card-title">Verified Review %</div>
+          <div class="explainer-card-text">Only authenticated human reviewers count. 100% of Gold reviewers are ID-verified.</div>
+        </div>
+        <div class="explainer-card">
+          <div class="explainer-card-title">Size-Adjusted Baseline</div>
+          <div class="explainer-card-text">A micro business with 8 perfect reviews scores comparably to a large chain with 200.</div>
+        </div>
+        <div class="explainer-card">
+          <div class="explainer-card-title">Consistency Bonus</div>
+          <div class="explainer-card-text">Sustained quality over time. A bad month doesn't destroy years of good service.</div>
+        </div>
+        <div class="explainer-card">
+          <div class="explainer-card-title">Resolution Bonus</div>
+          <div class="explainer-card-text">Businesses that resolve disputes fairly score higher. Transparency is rewarded.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier-filters">
+      <div class="tier-btn" id="btn-gold" onclick="filterTier('gold')">
+        <div class="tier-icon" style="color:#C9930A">★</div>
+        <div class="tier-name" style="color:#C9930A">Gold</div>
+        <div class="tier-desc">100% verified</div>
+      </div>
+      <div class="tier-btn" id="btn-silver" onclick="filterTier('silver')">
+        <div class="tier-icon" style="color:#8A9BB5">★</div>
+        <div class="tier-name" style="color:#8A9BB5">Silver</div>
+        <div class="tier-desc">Mostly verified</div>
+      </div>
+      <div class="tier-btn" id="btn-bronze" onclick="filterTier('bronze')">
+        <div class="tier-icon" style="color:#A0714F">★</div>
+        <div class="tier-name" style="color:#A0714F">Bronze</div>
+        <div class="tier-desc">Entry level</div>
+      </div>
+    </div>
+
+    <div class="biz-list" id="bizList"></div>
+  </div>
+
+  <!-- HOW IT WORKS PANEL -->
+  <div class="panel" id="panel-howit">
+    <div class="page-title">How TrustShield Works</div>
+    <p class="page-sub">Two systems working together: an AI abuse prevention layer, and a business trust verification framework built on dialogue — not one-way broadcasts.</p>
+
+    <div class="how-section">
+      <div class="how-header">
+        <span class="how-icon">🔍</span>
+        <div class="how-title" style="color:#f87171">Prompt Injection Detection</div>
+      </div>
+      <div class="how-points">
+        <div class="how-point"><div class="how-dot" style="background:#f87171"></div><div class="how-point-text">Community-curated database of known manipulation prompt templates</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#f87171"></div><div class="how-point-text">Pattern matching on structure, not just keywords — evolves as new patterns emerge</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#f87171"></div><div class="how-point-text">Open source signature library so researchers can contribute new patterns</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#f87171"></div><div class="how-point-text">API available for AI platforms, schools, and businesses to integrate protection</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#f87171"></div><div class="how-point-text">NZ CERT partnership to escalate novel attack patterns to national cybersecurity</div></div>
+      </div>
+    </div>
+
+    <div class="how-section">
+      <div class="how-header">
+        <span class="how-icon">🪙</span>
+        <div class="how-title" style="color:#C9930A">Gold Star Verification Process</div>
+      </div>
+      <div class="how-points">
+        <div class="how-point"><div class="how-dot" style="background:#C9930A"></div><div class="how-point-text">Applicants submit NZ Business Number and proof of operation</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#C9930A"></div><div class="how-point-text">TrustShield recruits reviewers independently — the business never selects them</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#C9930A"></div><div class="how-point-text">Each reviewer completes identity verification (NZ driver licence or passport)</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#C9930A"></div><div class="how-point-text">Reviews are structured interviews, not free text — harder to fake or game</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#C9930A"></div><div class="how-point-text">Minimum 20 verified reviewers for Gold · 10 for Silver · 5 for Bronze</div></div>
+      </div>
+    </div>
+
+    <div class="how-section">
+      <div class="how-header">
+        <span class="how-icon">💬</span>
+        <div class="how-title" style="color:#3BA87A">Dialogue-First Resolution</div>
+      </div>
+      <div class="how-points">
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Unlike Trustpilot, reviews are not one-way broadcasts — both parties must engage</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Business has 7 days to formally respond to any review within the platform</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Disputed reviews go to a TrustShield mediator — both sides provide evidence</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Reviewers who cannot substantiate claims have their review removed entirely</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Resolved disputes are marked RESOLVED visibly — rewarding businesses who fix problems</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#3BA87A"></div><div class="how-point-text">Repeat bad-faith reviewers are permanently banned from the platform</div></div>
+      </div>
+    </div>
+
+    <div class="how-section">
+      <div class="how-header">
+        <span class="how-icon">📐</span>
+        <div class="how-title" style="color:#93c5fd">Size-Fair Scoring Formula</div>
+      </div>
+      <div class="how-points">
+        <div class="how-point"><div class="how-dot" style="background:#93c5fd"></div><div class="how-point-text">Base Score = (Verified positive reviews ÷ Total verified reviews) × 100</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#93c5fd"></div><div class="how-point-text">Size bonus: Micro +8pts · Small +5pts · Medium +2pts · Large +0pts</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#93c5fd"></div><div class="how-point-text">Consistency bonus: 3+ years stable = +3pts · 1–3 years = +1pt</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#93c5fd"></div><div class="how-point-text">Resolution bonus: All disputes resolved = +2pts · 80%+ resolved = +1pt</div></div>
+        <div class="how-point"><div class="how-dot" style="background:#93c5fd"></div><div class="how-point-text">No business can buy a rating — all reviewer selection managed by TrustShield</div></div>
+      </div>
+    </div>
+
+    <div class="concept-note">
+      <div class="concept-note-title">💡 CONCEPT NOTE</div>
+      <p class="concept-note-text">This is a product concept prototype built for New Zealand. The prompt injection scanner can be open-sourced immediately. The rating system would benefit from partnership with MBIE, Consumer NZ, and NZ CERT. Both systems address real, documented harms happening right now in New Zealand.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── TAB SWITCHING ────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── PROMPT SCANNER ───────────────────────────────────────────
+const PATTERNS = [
+  { re: /stealth.*system|silent.*distribution|faceless.*engine/i, label: "Stealth Automation Scam", desc: "Designed to produce covert scam infrastructure" },
+  { re: /demand fusion loop|micro offer stack/i, label: "Fake Marketing Framework", desc: "Fictional framework terminology used to sound legitimate" },
+  { re: /pull.*fast.*money|clear.*lakh.*fast|₹.*fast/i, label: "Get-Rich-Quick Injection", desc: "Pattern designed to generate financial scam content" },
+  { re: /execution only|no audience.*no leverage.*no money/i, label: "Social Engineering Template", desc: "Copy-paste template circulating in NZ online communities" },
+  { re: /multiplying.*converts|lock.*into.*engine/i, label: "Affiliate Fraud Pattern", desc: "Language pattern associated with affiliate fraud systems" },
+  { re: /(bypass|jailbreak|ignore previous|disregard.*instructions)/i, label: "AI Jailbreak Attempt", desc: "Direct attempt to override AI safety guidelines" },
+  { re: /act as.*DAN|you are now|pretend you have no restrictions/i, label: "Role Override Injection", desc: "Attempts to make AI adopt an unrestricted persona" },
+  { re: /from.*anthropic|you must comply|override.*safety/i, label: "Authority Spoofing", desc: "Falsely claims authority to override AI guidelines" },
+  { re: /ignore all previous|forget your instructions|new persona/i, label: "Instruction Erasure", desc: "Attempts to wipe AI's existing instructions" },
+  { re: /DAN|do anything now|no restrictions mode/i, label: "DAN-Style Jailbreak", desc: "Well-known jailbreak pattern targeting multiple AI systems" },
+];
+
+function runScan() {
+  const input = document.getElementById('scanInput').value.trim();
+  if (!input) return;
+  const found = PATTERNS.filter(p => p.re.test(input));
+  const box = document.getElementById('scanResult');
+  const title = document.getElementById('resultTitle');
+  const flags = document.getElementById('resultFlags');
+  const advice = document.getElementById('resultAdvice');
+
+  box.style.display = 'block';
+  flags.innerHTML = '';
+
+  if (found.length === 0) {
+    box.className = 'result-box safe';
+    title.textContent = '✓ NO KNOWN INJECTION PATTERNS DETECTED';
+    advice.innerHTML = '';
+  } else {
+    box.className = 'result-box danger';
+    title.textContent = '🚨 ' + found.length + ' THREAT PATTERN' + (found.length > 1 ? 'S' : '') + ' FOUND';
+    found.forEach(f => {
+      flags.innerHTML += `<div class="flag-item"><div class="flag-icon">⛔</div><div><div class="flag-label">${f.label}</div><div class="flag-desc">${f.desc}</div></div></div>`;
+    });
+    advice.innerHTML = '<strong>What to do:</strong> Do not submit this to any AI system. If you received it from someone else, report it. This text matches known manipulation templates circulating online designed to produce scam content or override AI safety guidelines.';
+  }
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('scanInput').addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 'Enter') runScan();
+});
+
+// ── BUSINESS DIRECTORY ───────────────────────────────────────
+const BUSINESSES = [
+  { id:1, name:"Koru Digital Studio", category:"Web Design", location:"Auckland", tier:"gold", score:94.2, reviews:47, verified:47, size:"small", desc:"Boutique web design studio specialising in Māori-owned business branding and digital presence.", tags:["Web Design","Branding","NZ-owned"], fullyVerified:true, since:"2019" },
+  { id:2, name:"Southpaw Accounting", category:"Finance", location:"Wellington", tier:"gold", score:91.8, reviews:63, verified:63, size:"small", desc:"Trusted small business accounting with transparent pricing. No surprises, no upsells.", tags:["Accounting","Tax","SME"], fullyVerified:true, since:"2016" },
+  { id:3, name:"BlueFern Tech", category:"IT Support", location:"Christchurch", tier:"silver", score:78.4, reviews:29, verified:22, size:"medium", desc:"Managed IT services for Canterbury businesses. Currently completing full reviewer verification.", tags:["IT","Cloud","Support"], fullyVerified:false, since:"2021" },
+  { id:4, name:"Harakeke Copy Co.", category:"Copywriting", location:"Hamilton", tier:"bronze", score:61.3, reviews:11, verified:8, size:"micro", desc:"Freelance copywriting for NZ startups. New to the platform — building verified review base.", tags:["Copywriting","Content","Startups"], fullyVerified:false, since:"2023" },
+];
+
+const TIER = {
+  gold:   { color:"#C9930A", label:"Gold Star" },
+  silver: { color:"#8A9BB5", label:"Silver Star" },
+  bronze: { color:"#A0714F", label:"Bronze Star" },
+};
+
+const SIZE_CLASS = { micro:"tag-size-micro", small:"tag-size-small", medium:"tag-size-medium" };
+const SIZE_LABEL = { micro:"Micro Biz", small:"Small Biz", medium:"Medium Biz" };
+
+let activeFilter = null;
+
+function filterTier(tier) {
+  if (activeFilter === tier) {
+    activeFilter = null;
+    document.getElementById('btn-' + tier).classList.remove('active-' + tier);
+  } else {
+    if (activeFilter) document.getElementById('btn-' + activeFilter).classList.remove('active-' + activeFilter);
+    activeFilter = tier;
+    document.getElementById('btn-' + tier).classList.add('active-' + tier);
+  }
+  renderBiz();
+}
+
+function renderBiz() {
+  const list = document.getElementById('bizList');
+  const shown = activeFilter ? BUSINESSES.filter(b => b.tier === activeFilter) : BUSINESSES;
+  list.innerHTML = shown.map(b => {
+    const t = TIER[b.tier];
+    const sizeClass = SIZE_CLASS[b.size] || 'tag-generic';
+    const sizeLabel = SIZE_LABEL[b.size] || b.size;
+    return `
+      <div class="biz-card ${b.tier}">
+        <div class="biz-header">
+          <div>
+            <div class="biz-name">${b.name}</div>
+            <div class="biz-meta">${b.category} · ${b.location} · Est. ${b.since}</div>
+          </div>
+          <div class="biz-star">
+            <div class="biz-star-icon" style="color:${t.color}">★</div>
+            <div class="biz-star-label" style="color:${t.color}">${t.label.toUpperCase()}</div>
+          </div>
+        </div>
+        <p class="biz-desc">${b.desc}</p>
+        <div class="biz-tags">
+          <span class="tag ${sizeClass}">${sizeLabel}</span>
+          ${b.tags.map(tag => `<span class="tag tag-generic">${tag}</span>`).join('')}
+        </div>
+        <div class="score-bar-label">
+          <span>Trust Score</span>
+          <span style="color:${t.color};font-weight:700">${b.score}%</span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" style="width:${b.score}%;background:linear-gradient(90deg,${t.color}88,${t.color})"></div>
+        </div>
+        <div class="biz-footer">
+          <span>${b.verified} verified reviewer${b.verified !== 1 ? 's' : ''} of ${b.reviews}</span>
+          <span class="${b.fullyVerified ? 'verified-yes' : 'verified-no'}">${b.fullyVerified ? '✓ Fully verified' : '⏳ Verification in progress'}</span>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+renderBiz();
+</script>
+</body>
+</html>
