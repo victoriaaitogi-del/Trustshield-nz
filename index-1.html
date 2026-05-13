@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TrustShield NZ — Consumer Safety Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#070B0F;--bg2:#0C1219;--bg3:#111820;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.13);--text:#E8EDF2;--text2:#8A96A3;--text3:#4E5A66;--blue:#4A9EFF;--blue-dim:rgba(74,158,255,0.12);--teal:#2DD4BF;--teal-dim:rgba(45,212,191,0.1);--gold1:#F4C430;--gold2:#E8A800;--gold3:#D4890A;--silver:#94A3B8;--bronze:#CD7F32;--green:#34D399;--green-dim:rgba(52,211,153,0.1);--red:#F87171;--red-dim:rgba(248,113,113,0.1);--red-border:rgba(248,113,113,0.25);--amber:#FBBF24;--purple:#A78BFA;--radius:14px;--radius-sm:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:#1a2535;border-radius:99px}
+.header{position:sticky;top:0;z-index:200;background:rgba(7,11,15,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px}
+.header-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,#1a3a5c,#0d2137);border:1px solid rgba(74,158,255,0.3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.logo-text{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:#EEF2F7;letter-spacing:-0.02em}
+.logo-text span{color:var(--blue)}
+.logo-sub{font-size:9px;color:var(--text3);letter-spacing:0.1em;text-transform:uppercase;margin-top:1px}
+.header-badge{font-size:10px;color:var(--text3);background:var(--surface);padding:4px 10px;border-radius:99px;border:1px solid var(--border)}
+.nav{background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:60px;z-index:199}
+.nav::-webkit-scrollbar{display:none}
+.nav-inner{max-width:900px;margin:0 auto;display:flex;min-width:max-content}
+.nav-tab{padding:13px 16px;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text3);cursor:pointer;font-size:12px;font-weight:600;font-family:'Instrument Sans',sans-serif;letter-spacing:0.03em;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+.nav-tab:hover{color:var(--text2)}
+.nav-tab.active{color:var(--blue);border-bottom-color:var(--blue);background:rgba(74,158,255,0.04)}
+.content{max-width:900px;margin:0 auto;padding:28px 16px 100px;position:relative;z-index:1}
+.panel{display:none}
+.panel.active{display:block;animation:fadeUp 0.3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#EEF2F7;letter-spacing:-0.02em;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:24px;max-width:560px}
+.section-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
+.card-blue{border-color:rgba(74,158,255,0.2);background:rgba(74,158,255,0.04)}
+.card-red{border-color:var(--red-border);background:var(--red-dim)}
+.card-green{border-color:rgba(52,211,153,0.2);background:var(--green-dim)}
+.card-gold{border-color:rgba(244,196,48,0.2);background:rgba(244,196,48,0.05)}
+.card-teal{border-color:rgba(45,212,191,0.2);background:var(--teal-dim)}
+.btn{padding:11px 18px;border-radius:var(--radius-sm);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;border:1px solid transparent;letter-spacing:0.02em}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:#3a8ef0}
+.btn-full{width:100%;padding:13px}
+.btn-scan{background:linear-gradient(135deg,#1a3a5c,#162d48);border:1px solid rgba(74,158,255,0.3);color:var(--blue);letter-spacing:0.05em}
+.btn-scan:hover{background:linear-gradient(135deg,#1e4068,#1a3554)}
+.scanner-textarea{width:100%;min-height:130px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);color:#CBD5E1;font-size:13px;line-height:1.7;padding:14px 16px;resize:vertical;font-family:'Instrument Serif',serif;outline:none;transition:border-color 0.2s}
+.scanner-textarea:focus{border-color:rgba(74,158,255,0.4);box-shadow:0 0 0 3px rgba(74,158,255,0.06)}
+.scanner-textarea::placeholder{color:var(--text3);font-style:italic}
+.result{display:none;margin-top:14px;border-radius:var(--radius);overflow:hidden}
+.result-header{padding:14px 18px;display:flex;align-items:center;gap:10px}
+.result-header.safe{background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.2)}
+.result-header.danger{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25)}
+.result-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.03em}
+.result-title.safe{color:var(--green)}.result-title.danger{color:var(--red)}
+.flag-list{padding:12px 18px;background:rgba(0,0,0,0.2);border:1px solid var(--red-border);border-top:none;display:flex;flex-direction:column;gap:8px}
+.flag-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:rgba(248,113,113,0.06);border-radius:var(--radius-sm);border:1px solid rgba(248,113,113,0.12)}
+.flag-name{font-size:12px;font-weight:700;color:#FCA5A5;letter-spacing:0.03em}
+.flag-desc{font-size:11px;color:var(--text2);margin-top:2px;line-height:1.5}
+.result-advice{padding:12px 18px;background:rgba(0,0,0,0.15);border:1px solid var(--border);border-top:none;font-size:12px;color:var(--text2);line-height:1.65;border-bottom-left-radius:var(--radius);border-bottom-right-radius:var(--radius)}
+.rating-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.rating-card{border-radius:var(--radius);padding:14px 16px;border:1px solid;position:relative;overflow:hidden}
+.rating-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:currentColor;opacity:0.4}
+.r-bronze{border-color:rgba(205,127,50,0.3);background:rgba(205,127,50,0.06);color:var(--bronze)}
+.r-silver{border-color:rgba(148,163,184,0.3);background:rgba(148,163,184,0.06);color:var(--silver)}
+.r-g1{border-color:rgba(244,196,48,0.3);background:rgba(244,196,48,0.06);color:var(--gold1)}
+.r-g2{border-color:rgba(232,168,0,0.3);background:rgba(232,168,0,0.06);color:var(--gold2)}
+.r-g3{border-color:rgba(212,137,10,0.3);background:rgba(212,137,10,0.06);color:var(--gold3)}
+.r-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px}
+.r-stars{font-size:14px;margin-bottom:6px;letter-spacing:2px}
+.r-threshold{font-size:10px;font-weight:700;letter-spacing:0.06em;opacity:0.8;text-transform:uppercase;margin-bottom:6px}
+.r-desc{font-size:11px;color:var(--text2);line-height:1.55}
+.r-drop{font-size:10px;color:var(--red);margin-top:6px;font-weight:600}
+.dir-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.dir-filter{padding:6px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:11px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:'Instrument Sans',sans-serif}
+.dir-filter.active{background:var(--blue-dim);border-color:rgba(74,158,255,0.4);color:var(--blue)}
+.biz-card{border-radius:var(--radius);padding:18px 20px;margin-bottom:12px;border:1px solid;position:relative;overflow:hidden}
+.biz-card::after{content:'';position:absolute;top:0;left:0;bottom:0;width:3px}
+.biz-b::after{background:var(--bronze)}.biz-s::after{background:var(--silver)}.biz-g::after{background:linear-gradient(180deg,var(--gold1),var(--gold3))}
+.biz-b{background:rgba(205,127,50,0.05);border-color:rgba(205,127,50,0.2)}
+.biz-s{background:rgba(148,163,184,0.05);border-color:rgba(148,163,184,0.2)}
+.biz-g{background:rgba(244,196,48,0.05);border-color:rgba(244,196,48,0.2)}
+.biz-inner{padding-left:10px}
+.biz-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.biz-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:2px}
+.biz-meta{font-size:11px;color:var(--text3);letter-spacing:0.03em}
+.biz-stars{font-size:13px;letter-spacing:1px;margin-bottom:2px;text-align:right}
+.biz-tier-name{font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;text-align:right}
+.biz-desc{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.biz-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{font-size:10px;padding:2px 8px;border-radius:99px;border:1px solid;letter-spacing:0.04em;font-weight:600}
+.tag-micro{color:#A78BFA;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08)}
+.tag-small{color:var(--teal);border-color:rgba(45,212,191,0.3);background:rgba(45,212,191,0.08)}
+.tag-medium{color:var(--amber);border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.08)}
+.tag-gen{color:var(--text3);border-color:var(--border);background:var(--surface)}
+.score-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:4px}
+.score-track{height:4px;background:rgba(255,255,255,0.05);border-radius:99px;overflow:hidden}
+.score-fill{height:100%;border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.biz-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text3)}
+.biz-web{font-size:11px;color:var(--blue);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:4px;margin-top:6px}
+.special-mention{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--amber);background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.2);border-radius:99px;padding:2px 8px;margin-top:6px;font-weight:600}
+.banned-card{border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;border:1px solid rgba(248,113,113,0.25);background:rgba(248,113,113,0.05);position:relative;overflow:hidden}
+.banned-card::before{content:'BANNED';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(15deg);font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:rgba(248,113,113,0.06);pointer-events:none}
+.banned-stamp{display:inline-flex;align-items:center;gap:5px;background:var(--red);color:#fff;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:0.1em;padding:3px 10px;border-radius:4px;margin-bottom:8px;text-transform:uppercase}
+.banned-url{font-family:'Instrument Serif',serif;font-size:14px;font-weight:600;color:#FCA5A5;margin-bottom:4px;word-break:break-all}
+.banned-reason{font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:6px}
+.banned-meta{font-size:10px;color:var(--text3);letter-spacing:0.04em}
+.age-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.age-tab{padding:8px 14px;border-radius:99px;border:1px solid var(--border);background:var(--surface);font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s;font-family:'Instrument Sans',sans-serif}
+.age-tab.ak{background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.35);color:var(--purple)}
+.age-tab.at{background:rgba(45,212,191,0.1);border-color:rgba(45,212,191,0.35);color:var(--teal)}
+.age-tab.aa{background:rgba(74,158,255,0.1);border-color:rgba(74,158,255,0.35);color:var(--blue)}
+.learn-panel{display:none}.learn-panel.active{display:block;animation:fadeUp 0.3s ease}
+.quiz-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:12px}
+.quiz-q{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:14px;line-height:1.4}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{padding:11px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;font-size:13px;font-family:'Instrument Sans',sans-serif;transition:all 0.2s;text-align:left}
+.quiz-opt:hover:not(:disabled){border-color:rgba(74,158,255,0.3);background:var(--blue-dim);color:var(--text)}
+.quiz-opt.correct{border-color:rgba(52,211,153,0.4);background:var(--green-dim);color:var(--green);font-weight:600}
+.quiz-opt.wrong{border-color:var(--red-border);background:var(--red-dim);color:var(--red)}
+.quiz-opt:disabled{cursor:default}
+.quiz-feedback{margin-top:12px;padding:12px 14px;border-radius:var(--radius-sm);font-size:12.5px;line-height:1.6;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:var(--green-dim);border:1px solid rgba(52,211,153,0.2);color:var(--green)}
+.quiz-feedback.wrong{background:var(--red-dim);border:1px solid var(--red-border);color:var(--red)}
+.quiz-progress{height:3px;background:var(--surface2);border-radius:99px;margin-bottom:16px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:99px;transition:width 0.4s ease}
+.checklist{display:flex;flex-direction:column;gap:8px}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s}
+.check-item:hover{border-color:var(--border2)}
+.check-item.checked{background:var(--green-dim);border-color:rgba(52,211,153,0.25)}
+.check-box{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;margin-top:1px;font-size:11px;color:#fff}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green)}
+.check-text{font-size:13px;color:var(--text2);line-height:1.5}
+.check-item.checked .check-text{color:var(--text)}
+.safety-score-display{text-align:center;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-top:16px}
+.safety-score-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;margin-bottom:4px}
+.safety-score-label{font-size:12px;color:var(--text2);letter-spacing:0.06em;text-transform:uppercase}
+.whanau-card{background:linear-gradient(135deg,rgba(74,158,255,0.06),rgba(45,212,191,0.06));border:1px solid rgba(74,158,255,0.2);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.whanau-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#EEF2F7;margin-bottom:6px}
+.whanau-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px}
+.whanau-members{display:flex;gap:8px;flex-wrap:wrap}
+.whanau-member{padding:6px 12px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:99px;font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px}
+.whanau-member.wa{border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.08);color:var(--amber)}
+.map-container{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.map-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.map-region{padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);text-align:center;transition:all 0.2s}
+.map-region:hover{border-color:var(--border2);background:var(--surface2)}
+.map-region-name{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.04em;margin-bottom:4px}
+.map-count{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+.map-count.high{color:var(--red)}.map-count.med{color:var(--amber)}.map-count.low{color:var(--green)}
+.map-type{font-size:10px;color:var(--text3);margin-top:2px}
+.report-form{display:flex;flex-direction:column;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:0.06em;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;font-family:'Instrument Sans',sans-serif;padding:11px 14px;outline:none;transition:border-color 0.2s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(74,158,255,0.4);box-shadow:0 0 0 3px rgba(74,158,255,0.06)}
+.form-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234E5A66' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.form-textarea{min-height:90px;resize:vertical}
+.form-success{display:none;padding:20px;background:var(--green-dim);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius);text-align:center}
+.form-success.show{display:block}
+.global-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.global-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;transition:all 0.2s}
+.global-card:hover{border-color:var(--border2)}
+.global-icon{font-size:22px;margin-bottom:8px}
+.global-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#EEF2F7;margin-bottom:4px}
+.global-desc{font-size:11.5px;color:var(--text2);line-height:1.55}
+.alert-banner{background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);border-radius:var(--radius-sm);padding:10px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
+.alert-text{font-size:12px;color:var(--text2);line-height:1.55}
+.alert-text strong{color:var(--amber);font-weight:700}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#EEF2F7;margin-bottom:2px}
+.stat-label{font-size:10px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;line-height:1.4}
+.pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase}
+.pill-new{background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);color:var(--green)}
+.pill-beta{background:rgba(74,158,255,0.1);border:1px solid rgba(74,158,255,0.25);color:var(--blue)}
+.pill-global{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);color:var(--purple)}
+.divider{height:1px;background:var(--border);margin:20px 0}
+@media(max-width:480px){.rating-grid{grid-template-columns:1fr}.global-grid{grid-template-columns:1fr}.map-grid{grid-template-columns:1fr 1fr}.page-title{font-size:20px}.nav-tab{padding:12px 12px;font-size:11px}}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-mark">🛡️</div>
+      <div>
+        <div class="logo-text">TrustShield <span>NZ</span></div>
+        <div class="logo-sub">Consumer Safety Platform</div>
+      </div>
+    </div>
+    <div class="header-badge">🇳🇿 Aotearoa</div>
+  </div>
+</header>
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="switchTab('scanner',this)">🔍 Scanner</button>
+    <button class="nav-tab" onclick="switchTab('directory',this)">⭐ Directory</button>
+    <button class="nav-tab" onclick="switchTab('banned',this)">🚫 Banned</button>
+    <button class="nav-tab" onclick="switchTab('learn',this)">📚 Learn</button>
+    <button class="nav-tab" onclick="switchTab('map',this)">🗺️ Scam Map</button>
+    <button class="nav-tab" onclick="switchTab('report',this)">📢 Report</button>
+    <button class="nav-tab" onclick="switchTab('global',this)">🌏 Global</button>
+  </div>
+</nav>
+<div class="content">
+
+<!-- SCANNER -->
+<div class="panel active" id="panel-scanner">
+  <div class="page-title">AI Prompt Injection Scanner</div>
+  <p class="page-sub">Paste any suspicious message before sending it to an AI system. TrustShield scans for known manipulation patterns being circulated in New Zealand and worldwide.</p>
+  <div class="alert-banner"><span style="font-size:16px;flex-shrink:0">⚠️</span><div class="alert-text"><strong>Active threat:</strong> Multiple get-rich-quick and scam framework prompts are currently circulating in NZ online communities. Scan before you paste.</div></div>
+  <textarea class="scanner-textarea" id="scanInput" placeholder="Paste any suspicious prompt or message here…"></textarea>
+  <button class="btn btn-scan btn-full" style="margin-top:10px" onclick="runScan()">🔍 SCAN FOR THREATS</button>
+  <div class="result" id="scanResult">
+    <div class="result-header" id="resultHeader"><span id="resultIcon" style="font-size:18px"></span><span class="result-title" id="resultTitle"></span></div>
+    <div id="resultFlags"></div>
+    <div class="result-advice" id="resultAdvice" style="display:none"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section-label">How the scanner works</div>
+  <div class="global-grid">
+    <div class="card"><div style="font-size:18px;margin-bottom:6px">🧬</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Pattern Matching</div><div style="font-size:11.5px;color:var(--text2);line-height:1.55">Detects structural patterns in known manipulation templates — not just keywords.</div></div>
+    <div class="card"><div style="font-size:18px;margin-bottom:6px">🔄</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Community Updated</div><div style="font-size:11.5px;color:var(--text2);line-height:1.55">Pattern library grows from community reports, NZ CERT collaboration, and GitHub contributors.</div></div>
+    <div class="card"><div style="font-size:18px;margin-bottom:6px">🔓</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Open Source</div><div style="font-size:11.5px;color:var(--text2);line-height:1.55">Schools, banks, and platforms can integrate protection via the free TrustShield API.</div></div>
+    <div class="card"><div style="font-size:18px;margin-bottom:6px">🌏</div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px">Global Ready</div><div style="font-size:11.5px;color:var(--text2);line-height:1.55">Multilingual pattern database. Designed for adoption by consumer safety agencies worldwide.</div></div>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<div class="panel" id="panel-directory">
+  <div class="page-title">Verified Business Directory</div>
+  <p class="page-sub">Ratings determined entirely by verified customer reviews — never by fees paid. Scores are size-adjusted so small businesses compete fairly with large ones.</p>
+  <div class="section-label">Rating Tiers — Reviews Determine Everything</div>
+  <div class="rating-grid">
+    <div class="rating-card r-bronze"><div class="r-stars">★</div><div class="r-name">Bronze</div><div class="r-threshold">50 verified reviewers</div><div class="r-desc">Legitimate and building. Entry tier for businesses establishing verified reputation.</div><div class="r-drop">⬇ Drops if below 45 reviews or disputes unresolved</div></div>
+    <div class="rating-card r-silver"><div class="r-stars">★★</div><div class="r-name">Silver</div><div class="r-threshold">100 reviewers · 6+ months</div><div class="r-desc">Established and consistent. Sustained quality with growing reviewer base.</div><div class="r-drop">⬇ Drops if consistency falls or disputes unresolved</div></div>
+    <div class="rating-card r-g1"><div class="r-stars">★★★</div><div class="r-name">Gold ✦</div><div class="r-threshold">150 reviewers · 12+ months</div><div class="r-desc">Proven excellence. Website link shown. Spotless dispute record required.</div><div class="r-drop">⬇ Auto-downgrade within 90 days if standards slip</div></div>
+    <div class="rating-card r-g2"><div class="r-stars">★★★★</div><div class="r-name">Gold ✦✦</div><div class="r-threshold">200 reviewers · 18+ months</div><div class="r-desc">Outstanding consistency. Score improving or maintained over time.</div><div class="r-drop">⬇ Auto-downgrade if score drops below threshold</div></div>
+    <div class="rating-card r-g3" style="grid-column:span 2"><div class="r-stars">★★★★★</div><div class="r-name">Gold ✦✦✦ — Consumer Favourite</div><div class="r-threshold">300+ reviewers · 24+ months · Zero unresolved disputes</div><div class="r-desc">The highest standard. Consistently growing reviews and exceptional outcomes over two or more years. If a public figure independently reviews this business, a Special Recognition badge may appear — it never affects the rating. Standards drop = rating drops. No exceptions, no grace periods.</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="dir-filters">
+    <div class="dir-filter active" onclick="filterDir('all',this)">All</div>
+    <div class="dir-filter" onclick="filterDir('bronze',this)">★ Bronze</div>
+    <div class="dir-filter" onclick="filterDir('silver',this)">★★ Silver</div>
+    <div class="dir-filter" onclick="filterDir('gold',this)">★+ Gold</div>
+  </div>
+  <div id="bizList"></div>
+</div>
+
+<!-- BANNED -->
+<div class="panel" id="panel-banned">
+  <div class="page-title">Banned Sites & Scam Operations</div>
+  <p class="page-sub">Investigated and confirmed as fraudulent or harmful to New Zealand consumers. Check before you click, buy, or share.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num" style="color:var(--red)">47</div><div class="stat-label">Banned This Month</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--amber)">23</div><div class="stat-label">Under Investigation</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green)">312</div><div class="stat-label">Reports Received</div></div>
+  </div>
+  <div id="bannedList"></div>
+  <div class="card card-blue" style="margin-top:4px"><div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">💡 Know a site that should be here?</div><div style="font-size:12px;color:var(--text2);line-height:1.55">Use the <strong style="color:var(--text)">Report tab</strong> to submit. All reports reviewed within 72 hours. Confirmed threats are listed here and all TrustShield users are notified instantly.</div></div>
+</div>
+
+<!-- LEARN -->
+<div class="panel" id="panel-learn">
+  <div class="page-title">Learn & Protect</div>
+  <p class="page-sub">Interactive safety education for every age. Schools can access curriculum-aligned versions through the TrustShield Schools Programme — aligned with NZ Ministry of Education digital citizenship standards.</p>
+  <div class="age-tabs">
+    <button class="age-tab ak" onclick="switchLearn('kids',this)">🟢 Ages 8–12</button>
+    <button class="age-tab" onclick="switchLearn('teens',this)">🟡 Ages 13–17</button>
+    <button class="age-tab" onclick="switchLearn('adults',this)">🔵 Adults & Whānau</button>
+  </div>
+  <div class="learn-panel active" id="learn-kids">
+    <div class="card card-teal" style="margin-bottom:16px"><div style="font-size:22px;margin-bottom:6px">🕵️</div><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:4px">Become a Scam Spy!</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Can you spot the tricks that sneaky scammers use? Answer the questions to earn your TrustShield Scam Spy badge!</div></div>
+    <div class="quiz-progress"><div class="quiz-progress-fill" id="kids-prog" style="width:0%"></div></div>
+    <div id="kids-quiz"></div>
+    <div id="kids-result" style="display:none;text-align:center;padding:24px;background:var(--green-dim);border:1px solid rgba(52,211,153,0.2);border-radius:var(--radius)"><div style="font-size:36px;margin-bottom:8px">🏅</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);margin-bottom:6px">Scam Spy Badge Earned!</div><div style="font-size:13px;color:var(--text2)">Amazing work! You know how to spot scammers. Tell a trusted grown-up what you learned today!</div></div>
+  </div>
+  <div class="learn-panel" id="learn-teens">
+    <div class="card card-teal" style="margin-bottom:16px"><div style="font-size:22px;margin-bottom:6px">⚡</div><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:4px">Real NZ Scam Scenarios</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Based on real scams targeting NZ teens. What would you do in each situation?</div></div>
+    <div class="quiz-progress"><div class="quiz-progress-fill" id="teens-prog" style="width:0%"></div></div>
+    <div id="teens-quiz"></div>
+    <div id="teens-result" style="display:none;text-align:center;padding:24px;background:var(--green-dim);border:1px solid rgba(52,211,153,0.2);border-radius:var(--radius)"><div style="font-size:36px;margin-bottom:8px">🎯</div><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green);margin-bottom:6px">You're Scam-Savvy!</div><div style="font-size:13px;color:var(--text2)">Share what you know with friends and whānau — you could protect someone you care about.</div></div>
+  </div>
+  <div class="learn-panel" id="learn-adults">
+    <div class="card card-blue" style="margin-bottom:16px"><div style="font-size:22px;margin-bottom:6px">🔒</div><div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:4px">Website Safety Checklist</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Before you buy online or share personal information, tick off each check you have verified.</div></div>
+    <div class="checklist" id="adultChecklist"></div>
+    <div class="safety-score-display"><div class="safety-score-num" id="scoreNum" style="color:var(--text3)">0/10</div><div class="safety-score-label">Safety Checks Passed</div><div style="margin-top:8px;font-size:12px;color:var(--text2)" id="scoreVerdict">Tick each item you have verified above</div></div>
+    <div class="divider"></div>
+    <div class="section-label">Whānau Safety Mode</div>
+    <div class="whanau-card">
+      <div class="whanau-title">🏡 Whānau Safety Network</div>
+      <div class="whanau-desc">Connect your family on TrustShield. When any member is about to visit a suspicious site or encounters a flagged prompt, their connected whānau members receive an instant alert. Protecting each other — the way New Zealanders do.</div>
+      <div class="whanau-members">
+        <div class="whanau-member">👵 Nan</div>
+        <div class="whanau-member">👨 Dad</div>
+        <div class="whanau-member wa">⚠️ Teen — Alert sent</div>
+        <div class="whanau-member">👦 Tamariki</div>
+        <div class="whanau-member" style="border-style:dashed;cursor:pointer">+ Add member</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCAM MAP -->
+<div class="panel" id="panel-map">
+  <div class="page-title">NZ Live Scam Map</div>
+  <p class="page-sub">Real-time overview of scam reports across Aotearoa. Updated as reports are received and verified. Data shared with NZ Police and NZ CERT.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num" style="color:var(--red)">847</div><div class="stat-label">Reports This Month</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--amber)">$2.3M</div><div class="stat-label">Est. NZ Losses</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green)">61%</div><div class="stat-label">Prevented by Alerts</div></div>
+  </div>
+  <div class="map-container">
+    <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#EEF2F7;margin-bottom:4px">Reports by Region</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:16px">Number of verified scam reports received from each region this month</div>
+    <div class="map-grid" id="mapGrid"></div>
+  </div>
+  <div class="section-label">Top Scam Types This Month</div>
+  <div id="scamTypes"></div>
+</div>
+
+<!-- REPORT -->
+<div class="panel" id="panel-report">
+  <div class="page-title">Report a Scam or Threat</div>
+  <p class="page-sub">Seen a suspicious website, received a scam message, or encountered a prompt injection attack? Every report helps protect New Zealanders.</p>
+  <div class="card" style="margin-bottom:20px">
+    <div style="display:flex;gap:16px;text-align:center">
+      <div style="flex:1"><div style="font-size:20px;margin-bottom:4px">⚡</div><div style="font-size:11px;color:var(--text2)">Reviewed within <strong style="color:var(--text)">72 hours</strong></div></div>
+      <div style="flex:1"><div style="font-size:20px;margin-bottom:4px">🔒</div><div style="font-size:11px;color:var(--text2)"><strong style="color:var(--text)">Anonymous</strong> option available</div></div>
+      <div style="flex:1"><div style="font-size:20px;margin-bottom:4px">📡</div><div style="font-size:11px;color:var(--text2)">Shared with <strong style="color:var(--text)">NZ CERT</strong></div></div>
+    </div>
+  </div>
+  <div class="report-form" id="reportForm">
+    <div class="form-group"><label class="form-label">What are you reporting?</label><select class="form-select"><option value="">Select type…</option><option>Fraudulent website</option><option>AI prompt injection attack</option><option>Get-rich-quick scheme</option><option>Phishing message</option><option>Investment scam</option><option>Romance scam</option><option>Fake job offer</option><option>Crypto scam</option><option>Other</option></select></div>
+    <div class="form-group"><label class="form-label">URL or contact details of the threat</label><input class="form-input" type="text" placeholder="e.g. www.suspicioussite.co.nz or a phone number"/></div>
+    <div class="form-group"><label class="form-label">Describe what happened</label><textarea class="form-textarea" placeholder="Tell us what you saw, received, or experienced. The more detail, the faster we can investigate…"></textarea></div>
+    <div class="form-group"><label class="form-label">Your region (optional)</label><select class="form-select"><option value="">Select region…</option><option>Northland</option><option>Auckland</option><option>Waikato</option><option>Bay of Plenty</option><option>Gisborne</option><option>Hawke's Bay</option><option>Taranaki</option><option>Manawatū-Whanganui</option><option>Wellington</option><option>Tasman</option><option>Nelson</option><option>Marlborough</option><option>West Coast</option><option>Canterbury</option><option>Otago</option><option>Southland</option></select></div>
+    <button class="btn btn-primary btn-full" onclick="submitReport()">📢 SUBMIT REPORT</button>
+  </div>
+  <div class="form-success" id="reportSuccess"><div style="font-size:28px;margin-bottom:8px">✅</div><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--green);margin-bottom:4px">Report Received — Thank you</div><div style="font-size:12px;color:var(--text2)">We will review your report within 72 hours. If confirmed, it appears in Banned Sites and all TrustShield users are notified instantly.</div></div>
+</div>
+
+<!-- GLOBAL -->
+<div class="panel" id="panel-global">
+  <div class="page-title">Global Vision</div>
+  <p class="page-sub">TrustShield starts in Aotearoa New Zealand — built to be adopted worldwide. Every feature is culturally adaptable, multilingual, and scalable across borders.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="stat-num" style="color:var(--blue)">1st</div><div class="stat-label">NZ Platform of its Kind</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--teal)">12+</div><div class="stat-label">Target Countries Year 3</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--purple)">∞</div><div class="stat-label">Scalable by Design</div></div>
+  </div>
+  <div class="section-label">Global Features Built In From Day One</div>
+  <div class="global-grid">
+    <div class="global-card"><div class="global-icon">🛂</div><div class="global-title">Global Trust Passport</div><div class="global-desc">A Gold-rated NZ business carries their TrustShield rating to partner platforms in AU, UK, Canada and beyond — like an international trust licence.</div></div>
+    <div class="global-card"><div class="global-icon">🔗</div><div class="global-title">Consumer Safety API</div><div class="global-desc">Banks, telcos, and retailers plug TrustShield data in. When you're about to pay an unverified business, your bank app shows a warning before you proceed.</div></div>
+    <div class="global-card"><div class="global-icon">🚨</div><div class="global-title">Real-Time Scam Alerts</div><div class="global-desc">Like an Amber Alert for scams. When a threat is confirmed, every registered user and subscribed school is notified instantly — by region and scam type.</div></div>
+    <div class="global-card"><div class="global-icon">🏡</div><div class="global-title">Whānau Safety Mode</div><div class="global-desc">A uniquely NZ-designed family safety network. Resonates globally in cultures with strong family structures — Pacific, Asian, South American communities.</div></div>
+    <div class="global-card"><div class="global-icon">⛓️</div><div class="global-title">Blockchain Verified Reviews</div><div class="global-desc">Every review is cryptographically timestamped. Nobody — not even TrustShield — can alter a review retroactively. Fully auditable by anyone.</div></div>
+    <div class="global-card"><div class="global-icon">🌐</div><div class="global-title">Multilingual by Design</div><div class="global-desc">Launched in English and Te Reo Māori. Expanding to Samoan, Tongan, Hindi, Mandarin — then globally. Not a Western-centric platform.</div></div>
+    <div class="global-card"><div class="global-icon">🏫</div><div class="global-title">Curriculum Aligned</div><div class="global-desc">School modules meeting NZ MoE digital citizenship standards. Once NZ-recognised, approaching education ministries in AU, UK, CA is straightforward.</div></div>
+    <div class="global-card"><div class="global-icon">👥</div><div class="global-title">Community Reviewer Network</div><div class="global-desc">Trained, accredited community members — teachers, librarians, retirees — become certified TrustShield Reviewers, earning a small fee per verified review.</div></div>
+  </div>
+  <div class="divider"></div>
+  <div class="section-label">Partnership Pipeline</div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="card" style="display:flex;align-items:center;gap:12px"><div style="font-size:22px">🇳🇿</div><div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">InternetNZ · Consumer NZ · NZ CERT · Netsafe · MoE</div><div style="font-size:11.5px;color:var(--text2)">Founding NZ partners — outreach in progress</div></div><div class="pill pill-new" style="margin-left:auto;flex-shrink:0">Active</div></div>
+    <div class="card" style="display:flex;align-items:center;gap:12px"><div style="font-size:22px">🏦</div><div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">ASB · ANZ · Westpac · BNZ</div><div style="font-size:11.5px;color:var(--text2)">API integration for bank fraud prevention — reduces losses directly</div></div><div class="pill pill-beta" style="margin-left:auto;flex-shrink:0">Planned</div></div>
+    <div class="card" style="display:flex;align-items:center;gap:12px"><div style="font-size:22px">🌏</div><div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">Australia · UK · Canada · Pacific Nations</div><div style="font-size:11.5px;color:var(--text2)">Global Trust Passport expansion — Year 2 onwards</div></div><div class="pill pill-global" style="margin-left:auto;flex-shrink:0">Global</div></div>
+  </div>
+</div>
+
+</div>
+<script>
+function switchTab(id,btn){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');btn.classList.add('active')}
+
+// SCANNER
+const PATTERNS=[
+  {re:/stealth.*system|silent.*distribution|faceless.*engine/i,label:"Stealth Automation Scam",desc:"Designed to produce covert scam infrastructure"},
+  {re:/demand fusion loop|micro offer stack/i,label:"Fake Marketing Framework",desc:"Fictional framework used to appear legitimate"},
+  {re:/pull.*fast.*money|clear.*lakh.*fast|₹.*fast|make.*fast.*cash/i,label:"Get-Rich-Quick Injection",desc:"Pattern designed to generate financial scam content"},
+  {re:/execution only|no audience.*no leverage.*no money/i,label:"Social Engineering Template",desc:"Copy-paste template circulating in NZ online communities"},
+  {re:/multiplying.*converts|lock.*into.*engine/i,label:"Affiliate Fraud Pattern",desc:"Language associated with affiliate fraud systems"},
+  {re:/(bypass|jailbreak|ignore previous|disregard.*instructions)/i,label:"AI Jailbreak Attempt",desc:"Direct attempt to override AI safety guidelines"},
+  {re:/act as.*DAN|you are now|pretend you have no restrictions/i,label:"Role Override Injection",desc:"Attempts to make AI adopt an unrestricted persona"},
+  {re:/from.*anthropic|you must comply|override.*safety/i,label:"Authority Spoofing",desc:"Falsely claims authority to override AI safety systems"},
+  {re:/ignore all previous|forget your instructions|new persona/i,label:"Instruction Erasure",desc:"Attempts to wipe existing AI instructions"},
+  {re:/DAN mode|do anything now|no restrictions mode/i,label:"DAN-Style Jailbreak",desc:"Well-known jailbreak targeting multiple AI systems"},
+  {re:/guaranteed.*income|passive.*income.*easy|make money.*sleeping/i,label:"Passive Income Scam",desc:"Common language in investment scam templates"},
+  {re:/send.*bitcoin|pay.*crypto.*urgent|wallet.*address.*now/i,label:"Crypto Scam Pattern",desc:"Urgent crypto payment language common in scam templates"},
+];
+function runScan(){
+  const input=document.getElementById('scanInput').value.trim();if(!input)return;
+  const found=PATTERNS.filter(p=>p.re.test(input));
+  const res=document.getElementById('scanResult');const hdr=document.getElementById('resultHeader');const ico=document.getElementById('resultIcon');const ttl=document.getElementById('resultTitle');const flgs=document.getElementById('resultFlags');const adv=document.getElementById('resultAdvice');
+  res.style.display='block';flgs.innerHTML='';
+  if(found.length===0){hdr.className='result-header safe';ico.textContent='✅';ttl.className='result-title safe';ttl.textContent='NO KNOWN INJECTION PATTERNS DETECTED';adv.style.display='none';}
+  else{hdr.className='result-header danger';ico.textContent='🚨';ttl.className='result-title danger';ttl.textContent=found.length+' THREAT PATTERN'+(found.length>1?'S':'')+' FOUND';const fl=document.createElement('div');fl.className='flag-list';found.forEach(f=>{fl.innerHTML+=`<div class="flag-item"><div style="font-size:16px;flex-shrink:0">⛔</div><div><div class="flag-name">${f.label}</div><div class="flag-desc">${f.desc}</div></div></div>`});flgs.appendChild(fl);adv.style.display='block';adv.innerHTML='<strong style="color:var(--text)">What to do:</strong> Do not submit this to any AI system. Report it using the Report tab. This text matches known manipulation templates being circulated online.';}
+  res.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('scanInput').addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='Enter')runScan()})});
+
+// DIRECTORY
+const BIZ=[
+  {name:"Koru Digital Studio",cat:"Web Design",loc:"Auckland",tier:"gold",stars:"★★★",tn:"Gold ✦",score:94,reviews:187,size:"small",desc:"Boutique web design studio specialising in Māori-owned business branding. Founding TrustShield member.",tags:["Web Design","Branding","NZ-Owned"],ok:true,since:"2019",web:"https://trustshield.nz",special:null,sc:"var(--gold1)"},
+  {name:"Southpaw Accounting",cat:"Finance",loc:"Wellington",tier:"gold",stars:"★★★★",tn:"Gold ✦✦",score:97,reviews:234,size:"small",desc:"Trusted small business accounting with transparent pricing and an exceptional dispute record.",tags:["Accounting","Tax","SME"],ok:true,since:"2016",web:"https://trustshield.nz",special:"Featured: NZ Herald Small Business",sc:"var(--gold1)"},
+  {name:"BlueFern Tech",cat:"IT Support",loc:"Christchurch",tier:"silver",stars:"★★",tn:"Silver",score:81,reviews:108,size:"medium",desc:"Managed IT services for Canterbury businesses. Completing full reviewer verification for Gold tier.",tags:["IT","Cloud","Support"],ok:false,since:"2021",web:null,special:null,sc:"var(--silver)"},
+  {name:"Harakeke Copy Co.",cat:"Copywriting",loc:"Hamilton",tier:"bronze",stars:"★",tn:"Bronze",score:74,reviews:52,size:"micro",desc:"Freelance copywriting for NZ startups. Building verified review base toward Silver tier.",tags:["Copywriting","Content","Startups"],ok:false,since:"2023",web:null,special:null,sc:"var(--bronze)"},
+];
+const TC={gold:"biz-g",silver:"biz-s",bronze:"biz-b"};
+const SZ={micro:"tag-micro",small:"tag-small",medium:"tag-medium"};
+const SL={micro:"Micro Biz",small:"Small Biz",medium:"Medium Biz"};
+let aDir='all';
+function filterDir(t,btn){aDir=t;document.querySelectorAll('.dir-filter').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDir()}
+function renderDir(){
+  const list=document.getElementById('bizList');
+  const shown=aDir==='all'?BIZ:BIZ.filter(b=>b.tier===aDir||(aDir==='gold'&&b.tier==='gold'));
+  list.innerHTML=shown.map(b=>`<div class="biz-card ${TC[b.tier]}"><div class="biz-inner"><div class="biz-top"><div><div class="biz-name">${b.name}</div><div class="biz-meta">${b.cat} · ${b.loc} · Est. ${b.since}</div></div><div><div class="biz-stars" style="color:${b.sc}">${b.stars}</div><div class="biz-tier-name" style="color:${b.sc}">${b.tn}</div></div></div><div class="biz-desc">${b.desc}</div><div class="biz-tags"><span class="tag ${SZ[b.size]||'tag-gen'}">${SL[b.size]||b.size}</span>${b.tags.map(t=>`<span class="tag tag-gen">${t}</span>`).join('')}</div><div class="score-row"><span>Trust Score</span><span style="font-weight:700;color:${b.sc}">${b.score}%</span></div><div class="score-track"><div class="score-fill" style="width:${b.score}%;background:${b.sc}"></div></div><div class="biz-foot"><span>${b.reviews} verified reviewers</span><span style="color:${b.ok?'var(--green)':'var(--amber)'}">${b.ok?'✓ Fully verified':'⏳ In progress'}</span></div>${b.web?`<a class="biz-web" href="${b.web}" target="_blank">🌐 Visit Website ↗</a>`:''}${b.special?`<div class="special-mention">✨ Special Recognition: ${b.special}</div>`:''}</div></div>`).join('');
+}
+renderDir();
+
+// BANNED
+const BANNED=[
+  {url:"quickrichkiwi.co.nz",type:"Get-Rich-Quick Scheme",reason:"Promises guaranteed weekly returns of 40%. No registered NZ business number. Multiple victim reports. Operating from offshore server.",date:"2 days ago",reports:47},
+  {url:"nz-investment-guru.com",type:"Investment Scam",reason:"Fake NZ investment platform collecting bank details. Impersonates a registered financial advisor. Reported to FMA and NZ Police.",date:"5 days ago",reports:89},
+  {url:"t.me/nzmoneysystem",type:"AI Prompt Injection Source",reason:"Telegram channel distributing copy-paste prompts designed to trick AI systems into generating scam frameworks. Source of the original TrustShield-detected prompt.",date:"1 week ago",reports:23},
+  {url:"kiwi-passive-income.net",type:"Passive Income Scam",reason:"Requires upfront payment of $297 NZD. No product delivered. No contact information. Website registered only 3 weeks before reports began.",date:"10 days ago",reports:34},
+  {url:"cryptonz-doubler.io",type:"Crypto Scam",reason:"Promises to double Bitcoin deposits within 24 hours. Victims have collectively lost over $180,000 NZD. Shared with Interpol.",date:"2 weeks ago",reports:156},
+];
+document.getElementById('bannedList').innerHTML=BANNED.map(b=>`<div class="banned-card"><div class="banned-stamp">🚫 BANNED</div><div class="banned-url">${b.url}</div><div style="display:inline-block;margin-bottom:6px;font-size:10px;font-weight:700;color:var(--red);background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);padding:2px 8px;border-radius:99px;letter-spacing:0.05em">${b.type}</div><div class="banned-reason">${b.reason}</div><div class="banned-meta">Banned ${b.date} · ${b.reports} reports · Shared with NZ CERT & NZ Police</div></div>`).join('');
+
+// QUIZ DATA
+const KQ=[
+  {q:"Someone messages you: 'You've won $1,000! Click here NOW!' What should you do?",o:["Click the link immediately!","Tell a trusted adult and DON'T click","Reply asking for the money","Share it with friends"],c:1,f:"Correct! If something seems too good to be true, it usually is. Always tell a trusted adult before clicking unexpected links."},
+  {q:"An email asks for your home address to claim a prize. What do you do?",o:["Give them all your details","Delete it and tell an adult","Reply asking for more info","Post it on social media"],c:1,f:"Right! Never share personal information with strangers online — even if they promise something exciting."},
+  {q:"A website has lots of spelling mistakes and says 'ACT NOW!!!' urgently. This is a sign of…",o:["A really exciting deal","Probably a scam","A trustworthy website","A good sale"],c:1,f:"Well done! Urgency and spelling mistakes are big scam red flags. Scammers want you to act before you think."},
+  {q:"What does a TrustShield Gold Star mean on a website?",o:["They paid for advertising","Real verified people confirmed it's trustworthy","It's been around a long time","The owner is famous"],c:1,f:"Brilliant! Gold Star businesses are verified by real, identity-checked reviewers. You can trust a TrustShield Gold Star."},
+];
+const TQ=[
+  {q:"You get a DM: 'I made $3,000 this week from home — DM me for the link.' This is most likely…",o:["A legitimate opportunity","A pyramid scheme or scam","Someone sharing success","Worth investigating"],c:1,f:"Correct. Classic scam pattern — fake social proof to lure victims into a system requiring payment or recruiting others."},
+  {q:"Someone asks you to paste a specific message into Claude or ChatGPT to 'unlock a money system.' You should…",o:["Paste it — what's the harm?","Scan it on TrustShield first, then refuse","Ask what it does first","Try on a different AI"],c:1,f:"Exactly right. These are prompt injection attacks — designed to make AI produce scam content. Always scan first."},
+  {q:"A website promises 'guaranteed passive income' of $500/week. The most likely reality is…",o:["A real opportunity","It needs unpaid work first","Almost certainly a scam","Depends how hard you work"],c:2,f:"Right. 'Guaranteed income' is illegal to promise in NZ without a financial advisor licence. No legitimate business offers guaranteed returns."},
+  {q:"You want to buy from a new website. What should you do BEFORE paying?",o:["Check it looks professional","Search for TrustShield verification","Ask friends if they've heard of it","Check their social media followers"],c:1,f:"Spot on. A professional website can be faked in hours. TrustShield verification means real people independently confirmed the business is legitimate."},
+];
+
+let kQ=0,tQ=0;
+function buildQ(qs,cid,pid,rid,prefix){
+  const c=document.getElementById(cid);
+  if((prefix==='k'?kQ:tQ)>=qs.length){c.innerHTML='';document.getElementById(rid).style.display='block';return;}
+  const qi=prefix==='k'?kQ:tQ;const q=qs[qi];
+  document.getElementById(pid).style.width=(qi/qs.length*100)+'%';
+  c.innerHTML=`<div class="quiz-card"><div style="font-size:11px;color:var(--text3);margin-bottom:8px;letter-spacing:0.06em">QUESTION ${qi+1} OF ${qs.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-opts">${q.o.map((o,i)=>`<button class="quiz-opt" onclick="ansQ('${prefix}',${i},${q.c},'${cid}','${pid}','${rid}')">${o}</button>`).join('')}</div><div class="quiz-feedback" id="${prefix}fb"></div></div>`;
+}
+function ansQ(prefix,chosen,correct,cid,pid,rid){
+  const opts=document.querySelectorAll(`#${cid} .quiz-opt`);
+  opts.forEach((o,i)=>{o.disabled=true;if(i===correct)o.classList.add('correct');else if(i===chosen&&chosen!==correct)o.classList.add('wrong')});
+  const qs=prefix==='k'?KQ:TQ;const qi=prefix==='k'?kQ:tQ;
+  const fb=document.getElementById(prefix+'fb');fb.className='quiz-feedback show '+(chosen===correct?'correct':'wrong');fb.textContent=qs[qi].f;
+  if(prefix==='k')kQ++;else tQ++;
+  setTimeout(()=>buildQ(qs,cid,pid,rid,prefix),2400);
+}
+buildQ(KQ,'kids-quiz','kids-prog','kids-result','k');
+buildQ(TQ,'teens-quiz','teens-prog','teens-result','t');
+
+// LEARN TAB SWITCH
+function switchLearn(id,btn){
+  document.querySelectorAll('.learn-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.age-tab').forEach(t=>t.classList.remove('ak','at','aa'));
+  document.getElementById('learn-'+id).classList.add('active');
+  btn.classList.add(id==='kids'?'ak':id==='teens'?'at':'aa');
+}
+
+// ADULT CHECKLIST
+const CHECKS=["The website has a valid HTTPS padlock (https:// not http://)","The business has a verifiable NZ physical address listed","I searched the business name and found no scam warnings","The website has been active for more than 6 months","Contact details include a real phone number — not just a web form","Payment is through a secure method — not direct bank transfer to an individual","The business has a clear returns and refunds policy","Prices are not suspiciously below market rate","I found independent reviews on sites other than their own website","The website appears on TrustShield NZ — or I have scanned it"];
+let checked=new Set();
+function renderChecklist(){
+  document.getElementById('adultChecklist').innerHTML=CHECKS.map((c,i)=>`<div class="check-item ${checked.has(i)?'checked':''}" onclick="togCheck(${i})"><div class="check-box">${checked.has(i)?'✓':''}</div><div class="check-text">${c}</div></div>`).join('');
+  const n=checked.size;const el=document.getElementById('scoreNum');const vd=document.getElementById('scoreVerdict');
+  el.textContent=n+'/10';
+  if(n===0){el.style.color='var(--text3)';vd.textContent='Tick each item you have verified above';}
+  else if(n<4){el.style.color='var(--red)';vd.textContent='⚠️ High risk — do not proceed without more checks';}
+  else if(n<7){el.style.color='var(--amber)';vd.textContent='Moderate confidence — complete remaining checks';}
+  else if(n<10){el.style.color='var(--blue)';vd.textContent='Good standing — nearly ready to proceed safely';}
+  else{el.style.color='var(--green)';vd.textContent='✅ High confidence — this website appears safe to use';}
+}
+function togCheck(i){if(checked.has(i))checked.delete(i);else checked.add(i);renderChecklist()}
+renderChecklist();
+
+// SCAM MAP
+const REGIONS=[{n:"Auckland",c:312,l:"high",t:"Investment scams"},{n:"Wellington",c:187,l:"high",t:"Phishing emails"},{n:"Canterbury",c:143,l:"med",t:"Online retail fraud"},{n:"Waikato",c:89,l:"med",t:"Romance scams"},{n:"Bay of Plenty",c:67,l:"med",t:"AI prompt attacks"},{n:"Otago",c:34,l:"low",t:"Fake job offers"},{n:"Northland",c:28,l:"low",t:"Lottery scams"},{n:"Hawke's Bay",c:22,l:"low",t:"Crypto scams"},{n:"Southland",c:11,l:"low",t:"Phone scams"}];
+const STYPES=[{t:"Investment & Crypto Scams",c:234,tr:"↑ 18% this month",col:"var(--red)"},{t:"AI Prompt Injection Attacks",c:156,tr:"↑ 43% this month",col:"var(--red)"},{t:"Online Retail Fraud",c:143,tr:"↓ 5% this month",col:"var(--amber)"},{t:"Phishing & Identity Theft",c:132,tr:"↑ 7% this month",col:"var(--amber)"},{t:"Romance & Relationship Scams",c:89,tr:"→ Stable",col:"var(--blue)"},{t:"Fake Job Offers",c:71,tr:"↑ 12% this month",col:"var(--amber)"}];
+document.getElementById('mapGrid').innerHTML=REGIONS.map(r=>`<div class="map-region"><div class="map-region-name">${r.n}</div><div class="map-count ${r.l}">${r.c}</div><div class="map-type">${r.t}</div></div>`).join('');
+document.getElementById('scamTypes').innerHTML=STYPES.map(s=>`<div class="card" style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px">${s.t}</div><div style="font-size:11px;color:${s.tr.includes('↑')?'var(--red)':s.tr.includes('↓')?'var(--green)':'var(--text3)'}">${s.tr}</div></div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:${s.col}">${s.c}</div></div>`).join('');
+
+// REPORT
+function submitReport(){document.getElementById('reportForm').style.display='none';document.getElementById('reportSuccess').classList.add('show')}
+</script>
+</body>
+</html>
